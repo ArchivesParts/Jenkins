@@ -1,0 +1,76 @@
+<!-- User Edition Modal -->
+<div class="modal fade" id="entity-edit">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{content}}</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" ng-class="{'active':currentSection==section}"
+                        ng-repeat="section in sections"
+                        ng-click="changeSection(section)">
+                        <a href="#">{{section}}</a></li>
+                </ul>
+
+                <form ng-if="currentSection!=='parameters'">
+                    <div class="form-group col-md-6" ng-repeat="(name,value) in form[currentSection]">
+                        <label for="{{name}}">{{name}}</label>
+                        <input type="text" ng-if="isEditable(name)" class="form-control"
+                               id="{{name}}" placeholder="{{name}}" ng-change="updatedForm[currentSection][name]=value"
+                               ng-model="form[currentSection][name]">
+                        <input type="text" ng-if="!isEditable(name)" readonly class="form-control"
+                               id="{{name}}" placeholder="{{name}}"
+                               ng-model="value">
+                    </div>
+                </form>
+                <div ng-if="currentSection==='parameters'">
+                    <form class="form-inline">
+                        <select class="form-control col-md-4"
+                                ng-model="application"
+                                ng-options="parameter.application as parameter.application for parameter in form[currentSection] | unique : 'application'">
+                            <option value="">-- ALL --</option>
+                        </select>
+                        <select class="form-control col-md-4"
+                                ng-model="type"
+                                ng-options="parameter.flag as parameter.flag for parameter in form[currentSection] | unique : 'flag'">
+                            <option value="">-- ALL --</option>
+                        </select>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="freetext">Email address</label>
+                            <input type="text" class="form-control" id="freetext" placeholder="Enter text"
+                                   ng-model="freetext">
+                        </div>
+                    </form>
+
+                    <div class="form-group col-md-6"
+                         ng-repeat="parameter in form[currentSection]|filter:{ application: application,flag:type}|contain:freetext">
+                        <div class="checkbox" ng-if="parameter.flag==='feature'">
+                            <label>
+                                <input type="checkbox" ng-checked="parameter.value"
+                                       ng-click="updatedForm[currentSection][parameter.name]=parameter.value">{{parameter.description}}
+                                [{{parameter.name}}]
+                            </label>
+                        </div>
+                        <label for="{{parameter.name}}" ng-if="parameter.flag!=='feature'">{{parameter.name}}</label>
+                        <input type="text" ng-if="parameter.flag!=='feature'" class="form-control"
+                               id="{{parameter.name}}" placeholder="{{parameter.name}}"
+                               ng-change="updatedForm[currentSection][parameter.name]=parameter.value"
+                               ng-model="parameter.value">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="saveChange()">Save
+                    changes
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div><!-- /.modal -->

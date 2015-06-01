@@ -1,0 +1,33 @@
+contract<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+    <div class="row">
+        <form class="form-inline" ng-submit="searchContracts()">
+            <input type="text" class="form-control col-md-8" id="fullTextSearch"
+                   placeholder="Enter contractName, login, contractKey, name, firstName or email"
+                   ng-model="search.search">
+            <select class="form-control col-md-4"
+                    ng-model="search.type"
+                    ng-options="role for role in roles">
+                <option value="0">-- All --</option>
+            </select>
+            <button type="submit" class="btn btn-default">Search</button>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Contracts:</h1>
+            <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="contract in contracts">
+                <li>
+                    <i contract="contract" ng-click="edit(contract)"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <button type="button" class="col-lg-12 btn btn-default form-control" ng-if="loadMore"
+                ng-click="searchContracts(true)">More
+        </button>
+    </div>
+</div>
+<div ng-include="'components/footer/footer.html'"></div>
+<div ng-include="'components/formPopup/modal.html'"></div>

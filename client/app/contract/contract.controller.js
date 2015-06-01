@@ -174,7 +174,7 @@
             return result
         }
     };
-    angular.module('baseoFiceApp')
+    angular.module('codingChallengeApp')
             .controller('ContractCtrl', ['$scope', '$http', '$timeout', 'tools', ContractController])
             .directive('contract', ['$http', ContractDirective])
             .filter('contractTile', contractTileFilter)

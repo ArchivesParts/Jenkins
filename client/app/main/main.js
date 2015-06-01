@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('baseoFiceApp')
+angular.module('codingChallengeApp')
         .config(function ($routeProvider)
         {
             $routeProvider

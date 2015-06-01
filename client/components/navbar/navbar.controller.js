@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('baseoFiceApp')
+angular.module('codingChallengeApp')
         .controller('NavbarCtrl', function ($scope, $location, $http)
         {
         });

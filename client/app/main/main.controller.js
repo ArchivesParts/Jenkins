@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('baseoFiceApp')
+angular.module('codingChallengeApp')
         .controller('MainCtrl', function ($scope, $http, $q)
         {
             var self = this;

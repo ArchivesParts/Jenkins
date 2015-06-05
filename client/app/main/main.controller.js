@@ -18,13 +18,16 @@
             self.processing === 100 &&
             codingChallenge.getProjectLastJob(self.selected.name).then(function (response)
             {
+                self.status = "fa-refresh fa-spin";
                 if (!response.data.building) {
                     console.log('Wait new jobs');
                     if (self.selected.lastBuild.number < response.data.number) {
+                        self.status = "fa-gear fa-spin";
                         self.analyseProject(self.selected.name);
                         self.selected.lastBuild.number = response.data.number;
                     }
                 } else {
+                    self.status = "fa-pause";
                     console.log('Build runnning');
                 }
             })
@@ -53,7 +56,7 @@
 
         self.analyseProject = function (projectName)
         {
-            console.log('Launch analyse : '+projectName);
+            console.log('Launch analyse : ' + projectName);
             self.players = {};
             codingChallenge.getJobs(projectName).then(function (response)
             {

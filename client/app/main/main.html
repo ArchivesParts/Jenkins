@@ -3,20 +3,19 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Results:</h1>
+            <h1 class="page-header">Score for the last 100th jenkins build:</h1>
             <ul class="list-group">
-                <li class="list-group-item" >
+                <li class="list-group-item">
                     <div class="row">
                         <div class="col-md-1">
                             Classement
                         </div>
-                        <div class="col-md-2" >Player</div>
-                        <div class="col-md-1" >CS</div>
-                        <div class="col-md-1" >MD</div>
-                        <div class="col-md-1" >CPD</div>
+                        <div class="col-md-2">Player</div>
+                        <div class="col-md-1">Score</div>
+                        <div class="col-md-1">CS</div>
+                        <div class="col-md-1">MD</div>
+                        <div class="col-md-1">CPD</div>
                     </div>
-
-
                 </li>
                 <li class="list-group-item" ng-repeat="result in main.results|orderBy:'-score()'">
                     <div class="row">
@@ -26,17 +25,33 @@
                             <i class="fa fa-hand-o-left fa-flip-vertical" ng-show="$last"></i>
                         </div>
                         <div class="col-md-2" ng-bind="result.player"></div>
+                        <div class="col-md-1">
+                            <span
+                                    class="label"
+                                    ng-class="{'label-success':$first,'label-danger':$last,'label-default':$middle}">
+                                {{result.score()}} pts</span>
+                        </div>
                         <div class="col-md-1" ng-bind="result.stats.cs"></div>
                         <div class="col-md-1" ng-bind="result.stats.md"></div>
                         <div class="col-md-1" ng-bind="result.stats.cpd"></div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar"
+                                <div ng-if="result.score()>=0"
+                                     class="progress-bar progress-bar-success"
+                                     role="progressbar"
                                      style="width: {{result.score()}}%">
-                                    {{result.score()}} pts
+                                    <span class="sr-only">{{result.score()}} pts</span>
+
+                                </div>
+                                <div ng-if="result.score()<0"
+                                     class="progress-bar progress-bar-danger"
+                                     role="progressbar"
+                                     style="width: {{-result.score()}}%">
+                                    <span class="sr-only">{{result.score()}} pts</span>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
 

@@ -1,7 +1,7 @@
 'use strict';
 (function ()
 {
-    var mainController = function ($scope, $http, $q, $interval, codingChallenge)
+    var mainController = function ($scope, $http, $q, $interval, codingChallenge,config)
     {
         var self = this;
         self.jobs = [];
@@ -32,7 +32,7 @@
                 }
             })
 
-        }, 10000);
+        }, config.modules.codingGame.params.refreshPeriod);
 
         codingChallenge.getProjects().then(function (response)
         {

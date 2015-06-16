@@ -4,7 +4,7 @@
 
     angular
             .module('codingChallengeApp')
-            .controller('BookingCtrl', ['ProjectFactory', '$interval', '$filter', TilesController])
+            .controller('BookingCtrl', ['ProjectFactory', '$interval', '$filter', 'config', TilesController])
             .directive('uiTooltip', TooltipDirective);
 
     function TooltipDirective()
@@ -23,7 +23,7 @@
         };
     };
 
-    function TilesController(ProjectFactory, $interval, $filter)
+    function TilesController(ProjectFactory, $interval, $filter, config)
     {
         var vm = this;
         vm.users = {};
@@ -65,7 +65,7 @@
             return vm.projects && $filter('filter')(vm.projects, isLock, false).length > 0
         }
 
-        $interval(refresh, 60000);
+        $interval(refresh, config.modules.booking.params.refreshPeriod);
 
         function take(project)
         {

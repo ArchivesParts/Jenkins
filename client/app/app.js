@@ -10,8 +10,9 @@ angular.module('codingChallengeApp', [
     'ngSanitize',
     'ngRoute'
 ])
-        .config(function ($routeProvider, $locationProvider)
+        .config(function ($routeProvider, $locationProvider, config)
         {
+            Parse.initialize(config.main.parse.applicationKey, config.main.parse.secret);
             $routeProvider
                     .otherwise({
                         redirectTo: '/home'

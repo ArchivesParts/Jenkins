@@ -1,5 +1,5 @@
 {
-  "name": "1664",
+  "name": "CodingGame",
   "version": "0.0.0",
   "dependencies": {
     "body-parser": "^1.12.4",
@@ -9,6 +9,11 @@
     "ejs": "^2.3.1",
     "errorhandler": "^1.4.0",
     "express": "^4.12.4",
+    "grunt-angular-templates": "^0.5.7",
+    "grunt-asset-injector": "^0.1.0",
+    "grunt-filerev": "^2.3.1",
+    "injector": "^0.5.1",
+    "jit-grunt": "^0.9.1",
     "lodash": "^3.9.3",
     "method-override": "^2.3.3",
     "morgan": "^1.6.0",

@@ -1,0 +1,84 @@
+<style>
+    .mk-icon {
+        position: absolute;
+        top: auto;
+        bottom: 5px;
+        right: 5px;
+        z-index: 0;
+        font-size: 40px;
+        color: rgba(0, 0, 0, 0.15);
+    }
+</style>
+<section class="content">
+    <!--<div class="row" ng-repeat="projects in vm.rows">-->
+
+
+    <div ng-show="!vm.hasBookedProject()" style="text-align: center">
+        <section class="content">
+            <div class="callout callout-info">
+                <h4>All is done</h4>
+
+                <p>Aucune livraison en cours.</p>
+                <a class="btn btn-block btn-social btn-twitter" href="/#tiles"
+                   style="text-align: center;width: 310px;margin: auto;">
+                    <i class="fa fa-bookmark"></i> Reserver un projet via "Reservation"
+                </a>
+                <!--<a class="btn btn-app" href="/#tiles">-->
+                <!--<i class="fa fa-bookmark"></i> Reservation-->
+                <!--</a>-->
+            </div>
+            <!-- Default box -->
+        </section>
+        <i class="fa fa-cubes" style="font-size: 40em;opacity: 0.4"></i>
+    </div>
+
+    <div class="col-lg-2 col-xs-4" ng-repeat="project in vm.projects|filter:vm.isLock">
+        <!-- small box -->
+        <div class="small-box "
+             ng-class="{'bg-aqua':vm.isUnlock(project),'bg-green':vm.isBookedInRange(project,0,1),'bg-red':vm.isBookedAfter(project,4),'bg-yellow':vm.isBookedInRange(project,1,4)}">
+            <div class="inner" style="min-height: 71px">
+                <p>{{ project.name }}
+                </p>
+                    <span class="badge"
+                          ng-show="project.stack"
+                          ng-repeat="stackUser in project.currentUsers"
+                          ui-tooltip="stackUser">
+                        {{ stackUser.user.username.substring(0,2).toUpperCase() }}
+                    </span>
+            </div>
+            <div class="mk-icon">
+                <i class="fa"
+                   ng-class="{'fa-desktop':project.type==='IHM','fa-cogs':project.type==='API'}"></i>
+            </div>
+
+            <!-- Take if nobody use this project -->
+            <a class="small-box-footer" ng-show="vm.isUnlock(project)" ng-click="vm.take(project)" href="">
+                Take <i class="fa fa-plus-square-o"></i>
+            </a>
+            <!-- Take if somebody use this project but not you-->
+            <a class="small-box-footer"
+               ng-show="!vm.isUnlock(project) && !vm.isMine(project,vm.user) && !vm.iWait(project,vm.user)"
+               ng-click="vm.take(project)" href="">
+                Take next <i class="fa fa-plus-square"></i>
+            </a>
+            <!-- Release the project if you are the current user-->
+            <a class="small-box-footer"
+               ng-show="vm.isMine(project,vm.user)"
+               ng-click="vm.release(project)" href="">
+                Release <i class="fa fa-minus-square-o"></i>
+            </a>
+            <!-- Release the project even if you are not the current user-->
+            <a class="small-box-footer"
+               ng-show="!vm.isMine(project,vm.user) && vm.iWait(project,vm.user)"
+               ng-click="vm.release(project)" href="">
+                Release next <i class="fa fa-minus-square"></i>
+            </a>
+
+
+        </div>
+    </div>
+    <!-- ./col -->
+    <!--</div>-->
+    <!-- /.row -->
+
+</section><!-- /.content -->

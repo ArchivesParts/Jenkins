@@ -1,7 +1,7 @@
 'use strict';
 (function ()
 {
-    var mainController = function ($scope, $http, $q, $interval, codingChallenge,config)
+    var mainController = function ($scope, $http, $q, $interval, codingChallenge, config)
     {
         var self = this;
         self.jobs = [];
@@ -114,6 +114,7 @@
         }
     };
     angular.module('codingChallengeApp')
-            .controller('MainCtrl', ['$scope', '$http', '$q', '$interval', 'codingChallenge', mainController]);
+            .controller('MainCtrl',
+            ['$scope', '$http', '$q', '$interval', 'codingChallenge', 'config', mainController]);
 })
 ()

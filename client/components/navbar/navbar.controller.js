@@ -1,9 +1,27 @@
 'use strict';
 
 angular.module('codingChallengeApp')
-        .controller('NavbarCtrl', function ()
+        .controller('NavbarCtrl', ['$scope', '$rootScope', function ($scope, $rootScope)
         {
+
             var nav = this;
+
+            $rootScope.$on('notification', function (evt, title, body)
+            {
+                new Notification(
+                        title,
+                        {
+                            body: body,
+                            icon: "assets/images/HermanSilverBackHead.png"
+                        }
+                );
+            });
+            nav.user =  Parse.User.current();
+            $rootScope.$on('connect', function (evt, user)
+            {
+                nav.user = user;
+            });
+
             nav.menu = [
                 {
                     name: 'Coding Game',
@@ -38,5 +56,5 @@ angular.module('codingChallengeApp')
                 },
 
             ]
-        }
+        }]
 );

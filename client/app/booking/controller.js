@@ -4,7 +4,8 @@
 
     angular
             .module('codingChallengeApp')
-            .controller('BookingCtrl', ['ProjectFactory', '$interval', '$filter', 'config', TilesController])
+            .controller('BookingCtrl',
+            ['$scope', '$interval', '$filter', '$rootScope', 'ProjectFactory', 'config', TilesController])
             .directive('uiTooltip', TooltipDirective);
 
     function TooltipDirective()
@@ -23,7 +24,7 @@
         };
     };
 
-    function TilesController(ProjectFactory, $interval, $filter, config)
+    function TilesController($scope, $interval, $filter, $rootScope, ProjectFactory, config)
     {
         var vm = this;
         vm.users = {};
@@ -49,14 +50,40 @@
             });
         });
 
+        vm.refreshing = false;
         function refreshMatrix()
         {
-//            vm.rows = [];
-            vm.projects = $filter('orderBy')(vm.projects, ['type', 'name'], false);
-            for (var i = 0; i < vm.projects.length; i++) {
-//                if (i % 6 == 0) vm.rows.push([]);
-                vm.projects[i].currentUsers = getUsers(vm.projects[i]);
-//                vm.rows[vm.rows.length - 1].push(vm.projects[i]);
+            if (!vm.refreshing) {
+                vm.refreshing = true;
+                console.log('Refresh projects status');
+                vm.projects = $filter('orderBy')(vm.projects, ['type', 'name'], false);
+                for (var i = 0; i < vm.projects.length; i++) {
+                    var newUserSet = getUsers(vm.projects[i]);
+                    if (newUserSet.length !== vm.projects[i].currentUsers) {
+
+                        if (vm.projects[i].current &&
+                            vm.projects[i].current !== vm.projects[i].previous &&
+                            vm.projects[i].current.id === vm.user.id
+                        ) {
+                            $rootScope.$broadcast(
+                                    'notification',
+                                    vm.projects[i].name,
+                                    "Le projet est maintenant bloqué pour toi"
+                            );
+                        }
+                        if (newUserSet.length > 1 && vm.projects[i].newWaiter &&
+                            vm.user.id === vm.projects[i].current.id) {
+                            $rootScope.$broadcast(
+                                    'notification',
+                                    vm.projects[i].name,
+                                    newUserSet[newUserSet.length - 1].user.username +
+                                    " s'est ajouter à la file d'attente que tu bloques"
+                            );
+                        }
+                        vm.projects[i].currentUsers = newUserSet;
+                    }
+                }
+                vm.refreshing = false;
             }
         }
 
@@ -73,8 +100,7 @@
             ProjectFactory.take(project.id)
                     .then(function (data)
                     {
-                        console.log(data);
-                        vm.projects[index] = data;
+                        vm.projects[index].requests = data.requests;
                         refreshMatrix();
                     })
                     .catch();
@@ -86,8 +112,8 @@
             ProjectFactory.release(project.id)
                     .then(function (data)
                     {
-                        console.log(data);
-                        vm.projects[index] = data;
+                        project.current = null;
+                        vm.projects[index].requests = data.requests;
                         refreshMatrix();
                     }).catch();
         };
@@ -96,7 +122,12 @@
         {
             ProjectFactory.getAll().then(function (data)
             {
-                vm.projects = data;
+                data = $filter('orderBy')(data, ['type', 'name'], false)
+                data.forEach(function (project, pos)
+                {
+                    vm.projects[pos].requests = project.requests;
+                });
+
                 refreshMatrix();
 
             }).catch();
@@ -173,10 +204,16 @@
         {
             var users = [];
             if (project.requests) {
-                project.requests.forEach(function (entry)
+
+                project.requests.forEach(function (entry, pos)
                 {
-                    if (!project.current) {
+                    if (pos === 0) {
+                        project.previous = project.current
                         project.current = vm.users[entry.user.id];
+                    }
+                    if (pos === project.requests.length - 1) {
+                        project.newWaiter = project.last !== vm.users[entry.user.id]
+                        project.last = vm.users[entry.user.id];
                     }
 
                     users.push({

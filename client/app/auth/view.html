@@ -1,0 +1,25 @@
+<div ng-hide="auth.currentUser">
+    <!--<form ng-show="auth.scenario == 'Sign up'">-->
+        <!--<h2>Sign up</h2>-->
+        <!--Email: <input type="email" ng-model="auth.user.email" /><br />-->
+        <!--Username: <input type="text" ng-model="auth.user.username" /><br />-->
+        <!--Password: <input type="password" ng-model="auth.user.password" /><br />-->
+        <!--<button ng-click="auth.signUp(auth.user)">Sign up</button>-->
+        <!--or <a href="#" ng-click='auth.scenario="Log in"'>Log in</a>-->
+    <!--</form>-->
+
+    <!--<form ng-show="auth.scenario == 'Log in'">-->
+    <form>
+        <h2>Log in</h2>
+        Username: <input type="text" ng-model="auth.user.username" /><br />
+        Password: <input type="password" ng-model="auth.user.password" /><br />
+        <button ng-click="auth.logIn(auth.user)">Log in</button>
+        <!--or <a href="#" ng-click='auth.scenario="Sign up"'>Sign up</a>-->
+    </form>
+</div>
+
+<div ng-show="auth.currentUser">
+    <h1>Welcome {{auth.currentUser.get('username')}}</h1>
+    <p> You have been successfully logged in</p>
+    <button ng-click="auth.logOut(auth.user)">Log out</button>
+</div>

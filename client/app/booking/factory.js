@@ -15,22 +15,6 @@
             take: take,
             release: release,
         }
-        var connectedUser;
-
-        authenticate("ganne", "10jtal35");
-        function authenticate(login, pwd)
-        {
-            Parse.User.logIn(login, pwd, {
-                success: function (user)
-                {
-                    connectedUser = user;
-                },
-                error: function (user, error)
-                {
-                    console.log(error);
-                }
-            });
-        }
 
         function userToJSON(user)
         {
